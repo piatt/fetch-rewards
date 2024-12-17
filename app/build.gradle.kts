@@ -63,6 +63,9 @@ dependencies {
     kaptTest(libs.hilt.compiler)
     kaptAndroidTest(libs.hilt.compiler)
 
+    implementation(libs.retrofit.android)
+    implementation(libs.retrofit.converter)
+
     testImplementation(libs.junit)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
