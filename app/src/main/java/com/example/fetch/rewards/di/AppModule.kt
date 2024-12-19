@@ -9,7 +9,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -39,9 +42,9 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl(API_BASE_URL)
             .validateEagerly(true)
-//            .addConverterFactory(
-//                Json.asConverterFactory("application/json; charset=UTF8".toMediaType()))
-//            )
+            .addConverterFactory(
+                Json.asConverterFactory(MediaType.get("application/json; charset=UTF8"))
+            )
             .build()
             .create(FetchRewardsApiService::class.java)
     }

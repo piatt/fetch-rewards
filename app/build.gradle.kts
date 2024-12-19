@@ -66,6 +66,7 @@ dependencies {
 
     implementation(libs.retrofit.android)
     implementation(libs.retrofit.converter)
+    implementation(libs.kotlin.serialization)
 
     testImplementation(libs.junit)
 
