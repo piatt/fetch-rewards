@@ -1,6 +1,8 @@
 package com.example.fetch.rewards.di
 
 import com.example.fetch.rewards.data.FetchRewardsApiService
+import com.example.fetch.rewards.data.FetchRewardsRepositoryImpl
+import com.example.fetch.rewards.domain.FetchRewardsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,6 +44,14 @@ object AppModule {
 //            )
             .build()
             .create(FetchRewardsApiService::class.java)
+    }
+
+    @Provides
+    fun provideFetchRewardsRepository(
+        apiService: FetchRewardsApiService,
+        @IoDispatcher dispatcher: CoroutineDispatcher
+    ) : FetchRewardsRepository {
+        return FetchRewardsRepositoryImpl(apiService, dispatcher)
     }
 
     /**
