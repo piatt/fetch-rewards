@@ -29,9 +29,8 @@ class FetchRewardsRepositoryImpl @Inject constructor(
                 apiService.getProductItems()
             }
             if (response.isSuccessful && response.body() != null) {
-                Resource.Success(
-                    response.body()!!.map { it.toProductItem() }.toList()
-                )
+                val rawProductItemList = response.body()!!.map { it.toProductItem() }.toList()
+                Resource.Success(getAdjustedProductItems(rawProductItemList))
             } else {
                 Resource.Error(response.code(), response.message())
             }
@@ -42,5 +41,20 @@ class FetchRewardsRepositoryImpl @Inject constructor(
         } catch (e: Throwable) {
             Resource.Exception(e)
         }
+    }
+
+    /**
+     * Mutates the given [items] list to satisfy the following requirements:
+     * 1. Display all the items grouped by "listId"
+     * 2. Sort the results first by "listId" then by "name" when displaying.
+     * 3. Filter out any items where "name" is blank or null.
+     */
+    private fun getAdjustedProductItems(items: List<ProductItem>): List<ProductItem> {
+        return items
+            .filter { it.name.isNotBlank() }
+            .sortedBy { it.name }
+            .groupBy { it.listId }
+            .toSortedMap()
+            .values.flatten()
     }
 }
