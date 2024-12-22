@@ -71,6 +71,9 @@ dependencies {
     implementation(libs.kotlin.serialization)
 
     testImplementation(libs.junit)
+    testImplementation(libs.okhttp.mock.web.server)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.kotlin.test)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.junit)
