@@ -1,16 +1,20 @@
 package com.example.fetch.rewards.di
 
+import android.content.Context
+import com.example.fetch.rewards.data.NetworkConnectivityInterceptor
 import com.example.fetch.rewards.data.FetchRewardsApiService
 import com.example.fetch.rewards.data.FetchRewardsRepositoryImpl
 import com.example.fetch.rewards.domain.FetchRewardsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Qualifier
@@ -31,22 +35,30 @@ object AppModule {
     private const val API_BASE_URL = "https://fetch-hiring.s3.amazonaws.com/"
 
     /**
-     * Provides a singleton instance of [FetchRewardsApiService]
-     * to any area of the app that wishes to inject it.
+     * Provides a singleton Retrofit instance for use by API services within the app.
      *
-     * @see [https://square.github.io/retrofit/]
+     * @see NetworkConnectivityInterceptor
+     * @see [https://github.com/square/retrofit/tree/trunk/retrofit-converters/kotlinx-serialization]
      */
     @Singleton
     @Provides
-    fun provideFetchRewardsApiService() : FetchRewardsApiService {
+    fun provideRetrofit(@ApplicationContext context: Context): Retrofit {
+        val client = OkHttpClient().newBuilder()
+            .addInterceptor(NetworkConnectivityInterceptor(context))
+            .build()
         return Retrofit.Builder()
             .baseUrl(API_BASE_URL)
+            .client(client)
             .validateEagerly(true)
             .addConverterFactory(
                 Json.asConverterFactory(MediaType.get("application/json; charset=UTF8"))
             )
             .build()
-            .create(FetchRewardsApiService::class.java)
+    }
+
+    @Provides
+    fun provideFetchRewardsApiService(retrofit: Retrofit) : FetchRewardsApiService {
+        return retrofit.create(FetchRewardsApiService::class.java)
     }
 
     @Provides
