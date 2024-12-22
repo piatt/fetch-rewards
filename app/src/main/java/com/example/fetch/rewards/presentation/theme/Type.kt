@@ -1,4 +1,4 @@
-package com.example.fetch.rewards.ui.theme
+package com.example.fetch.rewards.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

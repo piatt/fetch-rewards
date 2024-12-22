@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Fetch Rewards</string>
+    <string name="default_error_message">Oops! Something went wrong. Please try again later.</string>
+    <string name="network_error_message">To get the best user experience, please enable your internet connection and try again.</string>
+    <string name="back_button_content_description">back button</string>
+    <string name="product_item_image_content_description">product item image</string>
+    <string name="product_details_message">Here are all the details about item %s!</string>
 </resources>
