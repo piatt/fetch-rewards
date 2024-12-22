@@ -29,7 +29,6 @@ class FetchRewardsViewModel @Inject constructor(
      * is visible to user while content is being fetched.
      */
     private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Loading)
-
     val viewState = _viewState.asStateFlow()
 
     /**
